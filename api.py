@@ -17,9 +17,9 @@ def get_most_recent_game(most_recent_game):
     black_username = black_player["username"]
     black_rating = black_player["rating"]
     vs_text = f"♜{white_username}({white_rating}) vs ♖{black_username}({black_rating})"
-    if white_player["result"] == "win":
+    if white_player["result"] == "win" or black_player["result"] == "checkmated":
         win_text = f"result: {white_username} victory!"
-    elif black_username["result"] == "win":
+    elif black_player["result"] == "win" or white_player["result"] == "checkmated":
         win_text = f"result: {white_username} victory!"
     else:
         win_text = "a draw apparently!"
@@ -56,7 +56,7 @@ def generate_board():
     svg_file.truncate()
     svg_file.write(chess.svg.board(board))
     drawing = svg2rlg("svg.svg")
-    renderPM.drawToFile(drawing, "png.png", fmt="PNG")
+    renderPM.drawToFile(drawing, "png.jpg", fmt="jpg")
     # print(chess.svg.board(board))
     svg_file.truncate()
 
@@ -68,17 +68,19 @@ def check_if_recent_game():
     all_games = r.get(f"http://api.chess.com/pub/player/xx_chess_x_queen_xx/games/{year}/{month}")
     most_recent_game = all_games.json()["games"][-1]
     game_url = most_recent_game["url"]
-    f = open("most_recent.txt", "r+")
+    f = open("most_recent.txt", "r")
     tweet = get_most_recent_game(most_recent_game)
-
-    if game_url != f.read():
-        f.truncate()
+    previous_game = f.read()
+    f.close()
+    if not previous_game == most_recent_game["url"]:
+        f = open("most_recent.txt", "w")
         f.write(game_url)
         f.close()
         pgn_file = open("pgn_file.pgn", "r+")
-        pgn_file.truncate()
+        pgn_file.truncate(0)
         pgn_file.write(most_recent_game["pgn"])
         pgn_file.close()
         generate_board()
         # print(most_recent_game)
         tweet_game(tweet, "png.png")
+        f.close()
