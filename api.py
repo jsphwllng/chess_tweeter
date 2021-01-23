@@ -56,7 +56,7 @@ def generate_board():
     svg_file.truncate()
     svg_file.write(chess.svg.board(board))
     drawing = svg2rlg("svg.svg")
-    renderPM.drawToFile(drawing, "png.jpg", fmt="jpg")
+    renderPM.drawToFile(drawing, "png.png", fmt="jpg")
     # print(chess.svg.board(board))
     svg_file.truncate()
 
