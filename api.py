@@ -40,7 +40,7 @@ def tweet_game(text, image):
     except:
         print("Error during authentication")
 
-    # api.update_with_media(image, text)
+    api.update_with_media(image, text)
 
 
 def generate_board():
