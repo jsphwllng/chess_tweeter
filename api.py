@@ -43,7 +43,6 @@ def tweet_game(text, image):
         print("Error during authentication")
 
     api.update_with_media(image, text)
-    os.remove("png.png")
 
 
 def generate_board():
@@ -52,13 +51,13 @@ def generate_board():
     board = first_game.board()
     for move in first_game.mainline_moves():
         board.push(move)
-    svg_file = open("svg.svg", "r+")
-    svg_file.truncate()
+    os.remove("svg.svg")
+    svg_file = open("svg.svg", "w")
     svg_file.write(chess.svg.board(board))
+    svg_file.close()
     drawing = svg2rlg("svg.svg")
-    renderPM.drawToFile(drawing, "png.png", fmt="jpg")
+    renderPM.drawToFile(drawing, "png.jpg", fmt="jpg")
     # print(chess.svg.board(board))
-    svg_file.truncate()
 
 
 def check_if_recent_game():
@@ -72,15 +71,19 @@ def check_if_recent_game():
     tweet = get_most_recent_game(most_recent_game)
     previous_game = f.read()
     f.close()
-    if not previous_game == most_recent_game["url"]:
+    # os.remove("png.jpg")
+    # os.remove("svg.svg")
+    if previous_game == most_recent_game["url"]:
         f = open("most_recent.txt", "w")
         f.write(game_url)
         f.close()
-        pgn_file = open("pgn_file.pgn", "r+")
-        pgn_file.truncate(0)
+        pgn_file = open("pgn_file.pgn", "w")
         pgn_file.write(most_recent_game["pgn"])
         pgn_file.close()
         generate_board()
         # print(most_recent_game)
         tweet_game(tweet, "png.png")
         f.close()
+
+
+check_if_recent_game()
