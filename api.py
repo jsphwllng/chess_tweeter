@@ -57,7 +57,7 @@ def generate_board():
     svg_file.write(chess.svg.board(board))
     drawing = svg2rlg("svg.svg")
     renderPM.drawToFile(drawing, "png.png", fmt="PNG")
-    print(chess.svg.board(board))
+    # print(chess.svg.board(board))
     svg_file.truncate()
 
 
@@ -80,5 +80,5 @@ def check_if_recent_game():
         pgn_file.write(most_recent_game["pgn"])
         pgn_file.close()
         generate_board()
-        print(most_recent_game)
+        # print(most_recent_game)
         tweet_game(tweet, "png.png")
