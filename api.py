@@ -17,14 +17,12 @@ def get_most_recent_game(most_recent_game):
     black_username = black_player["username"]
     black_rating = black_player["rating"]
     vs_text = f"♜{white_username}({white_rating}) vs ♖{black_username}({black_rating})"
-    if white_player["result"] == "win" or black_player["result"] == "checkmated":
-        win_text = f"result: {white_username} victory!"
-    elif black_player["result"] == "win" or white_player["result"] == "checkmated":
-        win_text = f"result: {white_username} victory!"
-    else:
-        win_text = "a draw apparently!"
+    pgn_file = open("pgn_file.pgn", "r")
+    pgn_termination1 = pgn_file.readlines()
+    pgn_termination = pgn_termination1[16]
+    # pgn line 16
+    win_text = pgn_termination.replace('"', "").replace('[', "").replace(']', "").replace("Termination", "")
     vs_text = vs_text + f"\n{win_text}\n{most_recent_game['url']}"
-    print(vs_text)
     return vs_text
 
 
@@ -42,7 +40,7 @@ def tweet_game(text, image):
     except:
         print("Error during authentication")
 
-    api.update_with_media(image, text)
+    # api.update_with_media(image, text)
 
 
 def generate_board():
@@ -73,7 +71,7 @@ def check_if_recent_game():
     f.close()
     # os.remove("png.jpg")
     # os.remove("svg.svg")
-    if not previous_game == most_recent_game["url"]:
+    if not previous_game == game_url:
         f = open("most_recent.txt", "w")
         f.write(game_url)
         f.close()
@@ -81,9 +79,7 @@ def check_if_recent_game():
         pgn_file.write(most_recent_game["pgn"])
         pgn_file.close()
         generate_board()
-        # print(most_recent_game)
         tweet_game(tweet, "png.png")
         f.close()
-
 
 check_if_recent_game()
