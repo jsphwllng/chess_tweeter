@@ -82,6 +82,3 @@ def check_if_recent_game():
         generate_board()
         print(most_recent_game)
         tweet_game(tweet, "png.png")
-
-
-check_if_recent_game()

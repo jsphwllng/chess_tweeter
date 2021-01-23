@@ -5,6 +5,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 sched = BlockingScheduler()
 
 # Schedule job_function to be called every 3 hours
-sched.add_job(check_if_recent_game(), 'interval', minutes=10)
+sched.add_job(check_if_recent_game, 'interval', minutes=10)
 
 sched.start()

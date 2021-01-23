@@ -8,3 +8,7 @@
 /httpRequests/
 /venv/
 /.idea/
+#most_recent.txt
+#*.pgn
+#*.png
+#creds.py
