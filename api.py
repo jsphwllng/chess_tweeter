@@ -73,7 +73,7 @@ def check_if_recent_game():
     f.close()
     # os.remove("png.jpg")
     # os.remove("svg.svg")
-    if previous_game == most_recent_game["url"]:
+    if not previous_game == most_recent_game["url"]:
         f = open("most_recent.txt", "w")
         f.write(game_url)
         f.close()
